@@ -29,7 +29,7 @@ export class UploadsController {
     }
 
     // Check it is an image
-    if (!file.mimetype.includes('image')) {
+    if (!file?.mimetype?.includes('image')) {
       throw new BadRequestException('File must be an image');
     }
 
