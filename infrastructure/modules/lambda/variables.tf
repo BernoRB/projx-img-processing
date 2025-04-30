@@ -32,3 +32,8 @@ variable "sqs_completion_queue_url" {
   description = "URL of the SQS completion queue"
   type        = string
 }
+
+variable "sqs_lambda_queue_arn" {
+  description = "ARN of the SQS lambda queue"
+  type        = string
+}
