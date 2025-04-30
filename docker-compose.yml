@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  upload-service:
+    build: ./upload-service
+    ports:
+      - "3000:3000"
+    environment:
+      - AWS_REGION=us-east-1
+      - S3_BUCKET_ORIGINAL=test-bucket-original
+      - S3_BUCKET_PROCESSED=test-bucket-processed
+      - DYNAMO_TABLE=test-table
+      - SQS_PROCESSING_QUEUE_URL=https://example.com/test-queue
+    restart: always
+
+  processing-service:
+    build: ./processing-service
+    ports:
+      - "3001:3001"
+    environment:
+      - AWS_REGION=us-east-1
+      - S3_BUCKET_ORIGINAL=test-bucket-original
+      - S3_BUCKET_PROCESSED=test-bucket-processed
+      - DYNAMO_TABLE=test-table
+      - SQS_PROCESSING_QUEUE_URL=https://example.com/test-queue
+      - SQS_LAMBDA_QUEUE_URL=https://example.com/test-lambda-queue
+      - SQS_COMPLETION_QUEUE_URL=https://example.com/test-completion-queue
+    restart: always
