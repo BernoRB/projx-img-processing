@@ -15,3 +15,15 @@ variable "environment" {
   type        = string
   default     = "dev"
 }
+
+variable "repository_url" {
+  description = "Git repository URL"
+  type        = string
+  default     = "https://github.com/BernoRB/projx-img-processing.git"
+}
+
+variable "key_name" {
+  description = "SSH key name for EC2 access"
+  type        = string
+  default     = "img-processing-key"
+}

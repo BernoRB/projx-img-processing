@@ -51,8 +51,9 @@ jobs:
 
     - name: Terraform Apply
       id: apply
-      run: terraform apply -auto-approve tfplan
-
+      run: |
+        terraform apply -auto-approve -var="repository_url=https://github.com/BernoRB/projx-img-processing.git" -var="key_name=${{ secrets.EC2_KEY_NAME }}" tfplan
+      
     - name: Extract Terraform Outputs
       id: terraform-outputs
       run: |

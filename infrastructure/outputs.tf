@@ -33,3 +33,13 @@ output "lambda_function_name" {
   description = "Name of the Lambda function for image processing"
   value       = module.lambda.function_name
 }
+
+output "ec2_instance_public_ip" {
+  description = "Public IP address of the EC2 instance"
+  value       = module.ec2.instance_public_ip
+}
+
+output "ec2_instance_public_dns" {
+  description = "Public DNS of the EC2 instance"
+  value       = module.ec2.instance_public_dns
+}

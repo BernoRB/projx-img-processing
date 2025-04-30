@@ -51,3 +51,21 @@ module "lambda" {
   sqs_lambda_queue_arn = module.sqs.lambda_queue_arn
   sqs_completion_queue_url = module.sqs.completion_queue_url
 }
+
+module "ec2" {
+  source                  = "./modules/ec2"
+  project_name            = var.project_name
+  environment             = var.environment
+  aws_region              = var.aws_region
+  repository_url          = var.repository_url
+  s3_bucket_original      = module.s3.bucket_original_name
+  s3_bucket_processed     = module.s3.bucket_processed_name
+  dynamodb_table_name     = module.dynamodb.table_name
+  sqs_processing_queue_url = module.sqs.processing_queue_url
+  sqs_processing_queue_arn = module.sqs.processing_queue_arn
+  sqs_lambda_queue_url    = module.sqs.lambda_queue_url
+  sqs_lambda_queue_arn    = module.sqs.lambda_queue_arn
+  sqs_completion_queue_url = module.sqs.completion_queue_url
+  sqs_completion_queue_arn = module.sqs.completion_queue_arn
+  key_name                = var.key_name
+}
