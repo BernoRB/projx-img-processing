@@ -20,6 +20,7 @@ export class UploadsController {
     @UploadedFile() file: Express.Multer.File,
     @Body('title') title: string,
     @Body('description') description: string,
+    @Body('operations') operations: string,
   ) {
     console.log('Received file:', file);
     console.log('Title:', title);
@@ -33,6 +34,22 @@ export class UploadsController {
       throw new BadRequestException('File must be an image');
     }
 
-    return this.uploadsService.processUpload(file, { title, description });
+    // Parse operations
+    let parsedOperations = [];
+    if (operations) {
+      try {
+        parsedOperations = JSON.parse(operations);
+      } catch (error) {
+        throw new BadRequestException(`Invalid operations format: ${error}`);
+      }
+    } else {
+      throw new BadRequestException('Operation(s) not defined');
+    }
+
+    return this.uploadsService.processUpload(file, {
+      title,
+      description,
+      operations: parsedOperations,
+    });
   }
 }
