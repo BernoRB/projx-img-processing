@@ -1,11 +1,12 @@
 name: Terraform Infrastructure Deployment
 
+# Uncomment to trigger on push!
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'infrastructure/**'
+  # push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - 'infrastructure/**'
   workflow_dispatch:
 
 jobs:
@@ -43,7 +44,14 @@ jobs:
     - name: Terraform Plan
       id: plan
       run: |
-        terraform plan -var="repository_url=https://github.com/BernoRB/projx-img-processing.git" -var="key_name=${{ secrets.EC2_KEY_NAME }}" -out=tfplan
+        terraform plan \
+          -var="repository_url=https://github.com/${{ github.repository }}.git" \
+          -var="key_name=${{ secrets.EC2_KEY_NAME }}" \
+          -var="docker_image_upload=${{ secrets.DOCKER_IMAGE_UPLOAD }}" \
+          -var="docker_image_processing=${{ secrets.DOCKER_IMAGE_PROCESSING }}" \
+          -var="aws_access_key_id=${{ secrets.AWS_ACCESS_KEY_ID }}" \
+          -var="aws_secret_access_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" \
+          -out=tfplan
       continue-on-error: true
 
     - name: Terraform Plan Status

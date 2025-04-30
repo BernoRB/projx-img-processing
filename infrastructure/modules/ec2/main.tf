@@ -169,37 +169,38 @@ locals {
   user_data = <<-EOF
     #!/bin/bash
     # Actualizar el sistema
-    yum update -y
+    dnf update -y
     
     # Instalar Docker
-    amazon-linux-extras install docker -y
+    dnf install -y docker
     systemctl start docker
     systemctl enable docker
+    usermod -a -G docker ec2-user
     
     # Instalar Docker Compose
-    curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    curl -L "https://github.com/docker/compose/releases/download/v2.20.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
     chmod +x /usr/local/bin/docker-compose
     
-    # Instalar Git
-    yum install git -y
+    # Instalar Git y jq
+    dnf install -y git jq
     
     # Crear directorio para la aplicación
     mkdir -p /app
+    chown ec2-user:ec2-user /app
     
-    # Clonar el repositorio
-    git clone ${var.repository_url} /app
-    
-    # Crear archivo docker-compose.yml
+    # Crear archivo docker-compose.yml con las imágenes pre-construidas
     cat > /app/docker-compose.yml <<'DOCKERCOMPOSE'
     version: '3'
     
     services:
       upload-service:
-        build: ./upload-service
+        image: ${var.docker_image_upload}
         ports:
           - "3000:3000"
         environment:
           - AWS_REGION=${var.aws_region}
+          - AWS_ACCESS_KEY_ID=${var.aws_access_key_id}
+          - AWS_SECRET_ACCESS_KEY=${var.aws_secret_access_key}
           - S3_BUCKET_ORIGINAL=${var.s3_bucket_original}
           - S3_BUCKET_PROCESSED=${var.s3_bucket_processed}
           - DYNAMO_TABLE=${var.dynamodb_table_name}
@@ -207,11 +208,13 @@ locals {
         restart: always
     
       processing-service:
-        build: ./processing-service
+        image: ${var.docker_image_processing}
         ports:
           - "3001:3001"
         environment:
           - AWS_REGION=${var.aws_region}
+          - AWS_ACCESS_KEY_ID=${var.aws_access_key_id}
+          - AWS_SECRET_ACCESS_KEY=${var.aws_secret_access_key}
           - S3_BUCKET_ORIGINAL=${var.s3_bucket_original}
           - S3_BUCKET_PROCESSED=${var.s3_bucket_processed}
           - DYNAMO_TABLE=${var.dynamodb_table_name}
@@ -221,8 +224,9 @@ locals {
         restart: always
     DOCKERCOMPOSE
     
-    # Arrancar los servicios
+    # Iniciar los servicios
     cd /app
+    docker-compose pull
     docker-compose up -d
   EOF
 }

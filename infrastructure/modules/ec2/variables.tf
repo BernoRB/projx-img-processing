@@ -75,3 +75,27 @@ variable "sqs_completion_queue_arn" {
   description = "ARN of SQS completion queue"
   type        = string
 }
+
+variable "docker_image_upload" {
+  description = "Docker image for upload service"
+  type        = string
+  default     = "bernorb/img-processing-upload:latest"
+}
+
+variable "docker_image_processing" {
+  description = "Docker image for processing service"
+  type        = string
+  default     = "bernorb/img-processing-processing:latest"
+}
+
+variable "aws_access_key_id" {
+  description = "AWS Access Key ID for services"
+  type        = string
+  sensitive   = true
+}
+
+variable "aws_secret_access_key" {
+  description = "AWS Secret Access Key for services"
+  type        = string
+  sensitive   = true
+}

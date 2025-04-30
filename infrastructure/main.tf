@@ -57,7 +57,10 @@ module "ec2" {
   project_name            = var.project_name
   environment             = var.environment
   aws_region              = var.aws_region
-  repository_url          = var.repository_url
+  docker_image_upload     = var.docker_image_upload
+  docker_image_processing = var.docker_image_processing
+  aws_access_key_id       = var.aws_access_key_id
+  aws_secret_access_key   = var.aws_secret_access_key
   s3_bucket_original      = module.s3.bucket_original_name
   s3_bucket_processed     = module.s3.bucket_processed_name
   dynamodb_table_name     = module.dynamodb.table_name
