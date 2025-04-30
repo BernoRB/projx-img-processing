@@ -66,7 +66,7 @@ jobs:
         echo "Config files created successfully"
 
     - name: Upload Terraform Outputs
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v2
       with:
         name: terraform-outputs
         path: config/terraform-outputs.json
