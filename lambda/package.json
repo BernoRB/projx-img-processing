@@ -1,0 +1,10 @@
+{
+  "name": "image-processing-lambda",
+  "version": "1.0.0",
+  "description": "Lambda function for image processing",
+  "main": "src/index.js",
+  "dependencies": {
+    "sharp": "^0.30.5",
+    "aws-sdk": "^2.1167.0"
+  }
+}

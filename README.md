@@ -1,28 +1,96 @@
-# Image Processing Microservices System
+Image Processing Microservices System
+=====================================
 
-A microservices-based image processing system deployed on AWS.
+A cloud-native microservices architecture for asynchronous image processing deployed on AWS.
 
-## Architecture
+Architecture Overview
+---------------------
 
-This project implements a streamlined microservices architecture for image processing with:
+This project implements a microservices architecture that processes images asynchronously:
 
-- Upload Service: Handles image uploads and provides status information
-- Processing Service: Coordinates asynchronous processing via SQS
-- Lambda: Performs intensive image processing
-- AWS Services: S3, DynamoDB, SQS for storage and communication
+-   **Upload Service (NestJS)**: Receives user uploads, stores images in AWS S3, and initiates processing
+-   **Processing Service (Node + Express)**: Orchestrates the processing workflow through message queues
+-   **Lambda Function**: Performs CPU-intensive image transformations
+-   **AWS Infrastructure**: Leverages S3, DynamoDB, SQS for storage, persistence, and communication
 
-## Services
+### Data Flow
 
-### Upload Service
-NestJS service to receive and validate images before uploading to S3. Also provides endpoints to check processing status.
+1.  User uploads image → Upload Service → S3 bucket + message to processing queue
+2.  Processing Service consumes message → updates status in DynamoDB → triggers Lambda
+3.  Lambda processes image → stores result in S3 → sends completion notification
+4.  User can query status and retrieve processed images
 
-### Processing Service
-Express service that coordinates the processing workflow using SQS messages. Listens to SQS queues and manages the state of processing in DynamoDB.
+Services
+--------
 
-## Infrastructure
+### Upload Service (NestJS)
 
-Infrastructure is defined as code using Terraform and deployed on AWS.
+-   **Endpoints**:
+    -   `POST /uploads`: Accepts multipart form image uploads
+    -   `GET /status/:id`: Returns current processing status
+-   **Features**:
+    -   File validation and sanitization
+    -   Secure S3 uploads with presigned URLs
+    -   Unique ID generation for job tracking
 
-## Local Development
+### Processing Service (NodeJs)
 
-Instructions for running the system locally with Docker Compose (coming soon).
+-   **Components**:
+    -   SQS consumers for processing coordination
+    -   State management with DynamoDB
+    -   Processing orchestration layer
+-   **APIs**:
+    -   `GET /api/status/:id`: Internal endpoint for status checks
+
+### Lambda Function
+
+-   **Capabilities**:
+    -   Image resizing and optimization
+    -   Format conversion
+    -   Metadata extraction
+    -   Advanced processing options
+
+Infrastructure
+--------------
+
+Infrastructure is defined as code using Terraform with modular organization:
+
+-   **S3**: Separate buckets for original and processed images
+-   **DynamoDB**: Tracking processing state and metadata
+-   **SQS**: Multiple queues for workflow coordination
+-   **Lambda**: Serverless processing function
+-   **IAM**: Least-privilege security policies
+
+Deployment
+----------
+
+The project uses GitHub Actions for CI/CD automation:
+
+-   **Infrastructure Pipeline**: Terraform workflow for AWS resource provisioning
+-   **Application Pipeline**: Docker builds and deployments to EC2
+
+Local Development
+-----------------
+
+### Prerequisites
+
+-   Docker and Docker Compose
+-   AWS CLI configured locally
+-   Node.js 16+ for local testing
+
+### Getting Started
+
+1.  Clone the repository
+2.  Run `docker-compose up` to start local services
+3.  Use the provided Postman collection for testing endpoints
+
+Project Structure
+-----------------
+```
+├── upload-service/       # NestJS service for uploads
+├── processing-service/   # NodeJs service for orchestration
+├── lambda/               # Image processing function
+├── infrastructure/       # Terraform IaC modules
+└── .github/workflows/    # CI/CD pipeline definitions
+```
+
