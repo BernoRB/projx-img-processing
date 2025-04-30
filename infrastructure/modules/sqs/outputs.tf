@@ -21,3 +21,8 @@ output "queue_arns" {
     aws_sqs_queue.completion_queue.arn
   ]
 }
+
+output "lambda_queue_arn" {
+  description = "ARN of the SQS lambda queue"
+  value       = aws_sqs_queue.lambda_queue.arn
+}

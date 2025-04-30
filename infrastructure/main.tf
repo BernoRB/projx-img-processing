@@ -48,5 +48,6 @@ module "lambda" {
   s3_bucket_original = module.s3.bucket_original_name
   s3_bucket_processed = module.s3.bucket_processed_name
   sqs_lambda_queue_url = module.sqs.lambda_queue_url
+  sqs_lambda_queue_arn = module.sqs.lambda_queue_arn
   sqs_completion_queue_url = module.sqs.completion_queue_url
 }

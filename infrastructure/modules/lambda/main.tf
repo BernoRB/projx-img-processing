@@ -37,7 +37,7 @@ resource "aws_lambda_function" "image_processor" {
 
 # Configurar el trigger SQS para Lambda
 resource "aws_lambda_event_source_mapping" "lambda_sqs_trigger" {
-  event_source_arn = var.sqs_lambda_queue_url
+  event_source_arn = var.sqs_lambda_queue_arn
   function_name    = aws_lambda_function.image_processor.arn
   batch_size       = 1
 }
