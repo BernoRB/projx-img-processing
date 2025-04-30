@@ -4,6 +4,8 @@ A cloud microservices architecture for asynchronous image processing deployed on
 
 ## Architecture Overview
 
+![Diagrama de Arquitectura](https://media-hosting.imagekit.io/368c897cacb942cd/diagram-export-4-30-2025-8_14_33-PM.png?Expires=1840645106&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=hGvxpuqTxXzlb0GWIDsNi9yvfvbJDt2uSif3VZetNTo6oEFrzvuPUZ~fLXOFHCsrhvkarw5PxX1Ck3KyQOUMlW3TvY-0U1-3YBb6srytTgJ4SLMmUCgQgvIqjNsTt79gpkTYfpfcjz7V5bHetqro98yvKUtD~bczAvPeIlix4M~Vicwrw~pN-6NMNH2eqgXEeLj71C9SNTUu44nVFoq0Yt2LauPnl7xCUhQqR1qyOKnIBcgEAHESCsKTq-91v775dz4HA91~1USmCbF9wGgGKVztsxNkLkFepyAzkqfRA64deJHtJJ7vNc5-6LbYjXQLMP98G4rs6SQLXsHunIrAxA__)
+
 This project implements a microservices architecture that processes images asynchronously:
 
 - **Upload Service (NestJS)**: Receives user uploads, stores images in S3, and initiates processing
