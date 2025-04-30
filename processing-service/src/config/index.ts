@@ -14,6 +14,6 @@ export const config = {
     completionQueue: process.env.SQS_COMPLETION_QUEUE_URL || ''
   },
   dynamodb: {
-    table: process.env.DYNAMODB_TABLE || 'image-processing'
+    table: process.env.DYNAMODB_TABLE || 'img-processing-dev-images'
   }
 };

@@ -58,6 +58,12 @@ class DBService {
     additionalData: Partial<ImageMetadata> = {}
   ): Promise<void> {
 
+    console.log(`Attempting to update image ${id} to status ${status}`);
+    console.log(`Using DynamoDB table: ${this.tableName}`);
+
+    const existingImage = await this.getImage(id);
+    console.log(`Existing image record: ${JSON.stringify(existingImage)}`);
+    
     const updateExpression = [
       'SET #status = :status',
       '#updatedAt = :updatedAt'
